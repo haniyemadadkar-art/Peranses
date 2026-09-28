@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Princess Assessment Center 👑</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #fff1fa, transparent 45%),
+        linear-gradient(135deg, #160d19, #281126, #120a14);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: min(92%, 850px);
+      margin: auto;
+      padding: 50px 0;
+    }
+
+    /* ---------- Header ---------- */
+
+    .header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .crown {
+      font-size: 70px;
+      animation: floating 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(255, 215, 0, .25));
+    }
+
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .header h1 {
+      font-size: clamp(28px, 6vw, 48px);
+      margin: 15px 0 10px;
+      color: #f8d77b;
+    }
+
+    .header p {
+      color: #d7c7d3;
+      font-size: 15px;
+    }
+
+    /* ---------- Card ---------- */
+
+    .card {
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 215, 150, .25);
+      border-radius: 28px;
+      padding: 35px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, .35);
+    }
+
+    .official {
+      text-align: center;
+      color: #d8c4d1;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 25px;
+    }
+
+    .official span {
+      color: #f5d174;
+    }
+
+    /* ---------- Profile ---------- */
+
+    .profile {
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(0, 0, 0, .15);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 25px;
+    }
+
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .profile-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-row span:first-child {
+      color: #bcaab7;
+    }
+
+    .profile-row strong {
+      color: #fff;
+    }
+
+    /* ---------- Test ---------- */
+
+    .test {
+      display: none;
+    }
+
+    .test.active {
+      display: block;
+    }
+
+    .question {
+      margin-bottom: 28px;
+    }
+
+    .question h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .question p {
+      color: #cbbcc8;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .progress {
+      height: 12px;
+      background: rgba(255,255,255,.08);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #d9a83e, #ffe79a);
+      border-radius: inherit;
+      transition: width 1.5s ease;
+    }
+
+    .percentage {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #eee;
+      font-size: 13px;
+    }
+
+    /* ---------- Button ---------- */
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #e4b94e, #f9dd86);
+      color: #27191f;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: .25s;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(240, 202, 100, .25);
+    }
+
+    button:active {
+      transform: scale(.98);
+    }
+
+    /* ---------- Result ---------- */
+
+    .result {
+      display: none;
+      text-align: center;
+    }
+
+    .result.active {
+      display: block;
+      animation: appear .8s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-title {
+      color: #f7d776;
+      font-size: 30px;
+      margin: 20px 0;
+    }
+
+    .big-score {
+      font-size: 75px;
+      font-weight: bold;
+      color: #fff;
+      margin: 15px;
+    }
+
+    .score-label {
+      color: #cbbbc7;
+    }
+
+    .verdict {
+      background: rgba(255, 215, 120, .08);
+      border: 1px solid rgba(255, 215, 120, .25);
+      padding: 22px;
+      border-radius: 20px;
+      margin: 25px 0;
+      line-height: 2;
+    }
+
+    /* ---------- Certificate ---------- */
+
+    .certificate {
+      display: none;
+      margin-top: 30px;
+      padding: 35px 25px;
+      border: 2px solid #dcb957;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at center, rgba(255,215,120,.1), transparent 60%),
+        rgba(255,255,255,.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .certificate.active {
+      display: block;
+      animation: certificateIn 1s ease;
+    }
+
+    @keyframes certificateIn {
+      from {
+        opacity: 0;
+        transform: scale(.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .certificate small {
+      color: #c8b8c2;
+    }
+
+    .certificate h2 {
+      color: #f5d273;
+      font-size: 28px;
+      margin: 20px 0;
+    }
+
+    .recipient {
+      font-size: 42px;
+      font-weight: bold;
+      color: white;
+      margin: 15px 0;
+    }
+
+    .title-award {
+      color: #e4c76e;
+      font-size: 20px;
+      margin-bottom: 25px;
+    }
+
+    .certificate-text {
+      color: #d4c7d0;
+      line-height: 2;
+      font-size: 14px;
+    }
+
+    .signature {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,.12);
+    }
+
+    .signature strong {
+      display: block;
+      color: #f6d77c;
+      font-size: 20px;
+      margin-top: 8px;
+    }
+
+    /* ---------- Trophy ---------- */
+
+    .trophy {
+      display: none;
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    .trophy.active {
+      display: block;
+      animation: trophyIn 1s ease;
+    }
+
+    @keyframes trophyIn {
+      from {
+        opacity: 0;
+        transform: scale(.5) rotate(-10deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    .trophy-icon {
+      font-size: 120px;
+      filter: drop-shadow(0 15px 25px rgba(255, 200, 50, .3));
+    }
+
+    .trophy h2 {
+      color: #f6d675;
+      margin-top: 10px;
+    }
+
+    .trophy p {
+      color: #d5c6d0;
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+
+    /* ---------- Footer ---------- */
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #8f7d89;
+      font-size: 11px;
+      line-height: 2;
+    }
+
+    footer strong {
+      color: #d9b85f;
+    }
+
+    /* ---------- Confetti ---------- */
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      font-size: 20px;
+      pointer-events: none;
+      animation: fall 3s linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        padding: 25px 0;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .recipient {
+        font-size: 32px;
+      }
+
+      .big-score {
+        font-size: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="crown">👑</div>
+
+      <h1>Princess Assessment Center™</h1>
+
+      <p>
+        مرکز رسمی و کاملاً غیرقابل اعتراض سنجش میزان پرنسس‌بودن
+      </p>
+
+    </header>
+
+
+    <!-- MAIN CARD -->
+
+    <main class="card">
+
+      <div class="official">
+        سامانه رسمی ارزیابی رفتارهای سلطنتی
+        <br>
+        <span>Designed & Developed by Hanieh™</span>
+      </div>
+
+
+      <!-- PROFILE -->
+
+      <section class="profile">
+
+        <div class="profile-row">
+          <span>نام پرونده</span>
+          <strong>حسین</strong>
+        </div>
+
+        <div class="profile-row">
+          <span>وضعیت پرونده</span>
+          <strong>در حال بررسی 👀</strong>
+        </div>
+
+        <div class="profile-row">
+          <span>مرجع ارزیابی</span>
+          <strong>هانیه</strong>
+        </div>
+
+      </section>
+
+
+      <!-- TEST -->
+
+      <section class="test active" id="test">
+
+        <div class="question">
+
+          <h3>آزمون شماره ۱ — مدت زمان قهر</h3>
+
+          <p>
+            سیستم با بررسی شواهد موجود در حال محاسبه است...
+          </p>
+
+          <div class="percentage">
+            <span>میزان قهر</span>
+            <span id="p1">0%</span>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="bar1"></div>
+          </div>
+
+        </div>
+
+
+        <div class="question">
+
+          <h3>آزمون شماره ۲ — انتظار ناز کشیده شدن</h3>
+
+          <div class="percentage">
+            <span>سطح انتظار</span>
+            <span id="p2">0%</span>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="bar2"></div>
+          </div>
+
+        </div>
+
+
+        <div class="question">
+
+          <h3>آزمون شماره ۳ — رفتار سلطنتی</h3>
+
+          <div class="percentage">
+            <span>میزان پرنسس‌بازی</span>
+            <span id="p3">0%</span>
+          </div>
+
+          <div class="progress">
+            <div class="progress-bar" id="bar3"></div>
+          </div>
+
+        </div>
+
+
+        <button id="start">
+          🔬 شروع ارزیابی نهایی
+        </button>
+
+      </section>
+
+
+      <!-- RESULT -->
+
+      <section class="result" id="result">
+
+        <h2 class="result-title">
+          گزارش نهایی هیئت داوران 👑
+        </h2>
+
+        <div class="big-score">
+          117
+        </div>
+
+        <div class="score-label">
+          امتیاز پرنسس‌بازی از 100
+        </div>
+
+        <div class="verdict">
+
+          ⚠️ سقف امتیاز رسمی کافی نبود.
+
+          <br><br>
+
+          هیئت داوران پس از بررسی دقیق پرونده اعلام می‌کند:
+
+          <br>
+
+          <strong>
+            میزان رفتارهای سلطنتی از حد استاندارد عبور کرده است.
+          </strong>
+
+          <br><br>
+
+          متهم رسماً واجد شرایط دریافت
+          <strong>کاپ پرنسسی</strong>
+          شناخته شد. 😂
+
+        </div>
+
+
+        <button id="award">
+          🏆 مشاهده مراسم اهدای کاپ
+        </button>
+
+      </section>
+
+
+      <!-- CERTIFICATE -->
+
+      <section class="certificate" id="certificate">
+
+        <small>
+          CERTIFICATE OF EXCELLENCE
+        </small>
+
+        <h2>
+          گواهی رسمی صلاحیت پرنسسی
+        </h2>
+
+        <div class="recipient">
+          حسین
+        </div>
+
+        <div class="title-award">
+          👑 پرنسس افتخاری هانیه 👑
+        </div>
+
+        <p class="certificate-text">
+
+          بدین‌وسیله گواهی می‌شود که نامبرده
+          پس از بررسی‌های تخصصی،
+          آزمون‌های متعدد و مشاهده‌ی شواهد غیرقابل انکار،
+
+          <br><br>
+
+          به دلیل عملکرد برجسته در زمینه‌های:
+
+          <br>
+
+          قهر کردن،
+          ناز کردن،
+          لوس‌بازی،
+          رفتار سلطنتی،
+          و انتظار برای اینکه طرف مقابل خودش بیاید آشتی کند،
+
+          <br><br>
+
+          شایستگی دریافت عنوان
+          <strong>پرنسس افتخاری</strong>
+          را کسب نموده است.
+
+        </p>
+
+
+        <div class="signature">
+
+          با احترام به مقام والای پرنسس
+
+          <strong>
+            هانیه
+          </strong>
+
+          <small>
+            Founder & Developer<br>
+            Princess Assessment Center™
+          </small>
+
+        </div>
+
+      </section>
+
+
+      <!-- TROPHY -->
+
+      <section class="trophy" id="trophy">
+
+        <div class="trophy-icon">
+          🏆
+        </div>
+
+        <h2>
+          PRINCESS CUP — 2026
+        </h2>
+
+        <p>
+
+          این کاپ با افتخار اهدا می‌شود به:
+
+          <br>
+
+          <strong>  جناب اقای حسین سلیمی</strong>
+
+          <br><br>
+
+          به پاس ثبت رکورد تاریخی
+          <br>
+
+          «بالاترین میزان پرنسس‌بازی در یک قهر»
+
+          <br><br>
+
+          🥇 رکورد ثبت شد و دیگر قابل انکار نیست.
+
+        </p>
+
+      </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      این سامانه کاملاً علمی است.
+      <br>
+
+      البته علمش توسط <strong>هانیه</strong> نوشته شده. 😂
+
+      <br><br>
+
+      Princess Assessment Center™ © 2026
+
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    const startButton = document.getElementById("start");
+
+    const test = document.getElementById("test");
+
+    const result = document.getElementById("result");
+
+    const awardButton = document.getElementById("award");
+
+    const certificate = document.getElementById("certificate");
+
+    const trophy = document.getElementById("trophy");
+
+
+    // مقدار دادن به Progress Bar
+
+    function animateBar(barId, textId, target) {
+
+      const bar = document.getElementById(barId);
+
+      const text = document.getElementById(textId);
+
+      let current = 0;
+
+      const interval = setInterval(() => {
+
+        current++;
+
+        bar.style.width = current + "%";
+
+        text.textContent = current + "%";
+
+        if (current >= target) {
+
+          clearInterval(interval);
+
+        }
+
+      }, 18);
+
+    }
+
+
+    // شروع ارزیابی
+
+    startButton.addEventListener("click", () => {
+
+      startButton.disabled = true;
+
+      startButton.textContent = "⏳ در حال تحلیل شواهد...";
+
+      animateBar("bar1", "p1", 87);
+
+      setTimeout(() => {
+
+        animateBar("bar2", "p2", 96);
+
+      }, 900);
+
+      setTimeout(() => {
+
+        animateBar("bar3", "p3", 100);
+
+      }, 1800);
+
+
+      setTimeout(() => {
+
+        test.style.display = "none";
+
+        result.classList.add("active");
+
+      }, 3800);
+
+    });
+
+
+    // مراسم اهدای جایزه
+
+    awardButton.addEventListener("click", () => {
+
+      certificate.classList.add("active");
+
+      trophy.classList.add("active");
+
+      awardButton.style.display = "none";
+
+      createConfetti();
+
+      window.scrollTo({
+
+        top: document.body.scrollHeight,
+
+        behavior: "smooth"
+
+      });
+
+    });
+
+
+    // ساخت کاغذ رنگی جشن
+
+    function createConfetti() {
+
+      const symbols = [
+
+        "👑",
+        "✨",
+        "💛",
+        "🏆",
+        "⭐",
+        "💎",
+        "🎉"
+
+      ];
+
+      for (let i = 0; i < 45; i++) {
+
+        const item = document.createElement("div");
+
+        item.className = "confetti";
+
+        item.textContent =
+          symbols[Math.floor(Math.random() * symbols.length)];
+
+        item.style.left =
+          Math.random() * 100 + "vw";
+
+        item.style.animationDuration =
+          (2 + Math.random() * 2) + "s";
+
+        item.style.animationDelay =
+          Math.random() * .8 + "s";
+
+        document.body.appendChild(item);
+
+
+        setTimeout(() => {
+
+          item.remove();
+
+        }, 4500);
+
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
